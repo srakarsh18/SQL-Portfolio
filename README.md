@@ -34,3 +34,22 @@ Group by location, population, date
 order by TotalDeathCount desc;
 
 ```
+```
+## Populationpercent Infection count
+
+Select Location, Population, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+FROM Covid_Portfolio.coviddeaths
+##Where location like '%states%'
+Group by Location, Population,
+order by PercentPopulationInfected desc;
+```
+```
+## Populationpercent Infection monthly count
+
+Select date, Location, Population, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+FROM Covid_Portfolio.coviddeaths
+##Where location like '%states%'
+Group by Location, Population, date
+order by PercentPopulationInfected desc;
+```
+
