@@ -52,4 +52,37 @@ FROM Covid_Portfolio.coviddeaths
 Group by Location, Population, date
 order by PercentPopulationInfected desc;
 ```
+```
+## Joining Deaths vs Vaccination
+
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
+FROM Covid_Portfolio.coviddeaths dea
+Join Covid_Portfolio.covidvaccinations vac
+	on dea.location = vac.location
+    and dea.date = vac.date
+where dea.continent is not null
+order by 2,3; 
+```
+```
+## Using CTE
+
+With PopvsVac (Continent, Location, Date, Population, New_vaccinations, RollingVaccination)
+as
+(
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
+, sum(vac.new_vaccinations) over (partition by dea.location order by dea.location, 
+dea.date ) as RollingVaccination
+## (RollingVaccination/population)*100
+FROM Covid_Portfolio.coviddeaths dea
+Join Covid_Portfolio.covidvaccinations vac
+	on dea.location = vac.location
+    and dea.date = vac.date
+where dea.continent is not null
+##order by 2,3
+)
+select *, (RollingVaccination/population)*100
+from PopvsVac;
+```
+
+
 
